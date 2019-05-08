@@ -1,0 +1,48 @@
+[1] catkin_make errors
+
+ImportError: No module named terminal_color
+dbw_mkz_msgs/CMakeFiles/dbw_mkz_msgs_generate_messages_eus.dir/build.make:90: recipe for target '/home/workspace/CarND-Capstone/ros/devel/share/roseus/ros/dbw_mkz_msgs/msg/GearReport.l' failed
+make[2]: *** [/home/workspace/CarND-Capstone/ros/devel/share/roseus/ros/dbw_mkz_msgs/msg/GearReport.l] Error 1
+CMakeFiles/Makefile2:732: recipe for target 'dbw_mkz_msgs/CMakeFiles/dbw_mkz_msgs_generate_messages_eus.dir/all' failed
+make[1]: *** [dbw_mkz_msgs/CMakeFiles/dbw_mkz_msgs_generate_messages_eus.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 69%] Generating C++ code from styx_msgs/TrafficLightArray.msg
+[ 70%] Generating Python from MSG styx_msgs/TrafficLight
+[ 70%] Generating Python from MSG styx_msgs/TrafficLightArray
+[ 72%] Generating C++ code from styx_msgs/Waypoint.msg
+[ 73%] Generating Python from MSG styx_msgs/Waypoint
+[ 74%] Generating Python msg __init__.py for styx_msgs
+[ 74%] Built target styx_msgs_generate_messages_py
+[ 74%] Built target styx_msgs_generate_messages_cpp
+Makefile:140: recipe for target 'all' failed
+make: *** [all] Error 2
+Invoking "make -j4 -l4" failed
+
+Ran into same issue:
+pip install --update catkin_pkg
+
+[2] bug in code 
+
+Traceback (most recent call last):
+  File "/home/workspace/CarND-Capstone/ros/src/waypoint_updater/waypoint_updater.py", line 134, in <module>
+    WaypointUpdater()
+  File "/home/workspace/CarND-Capstone/ros/src/waypoint_updater/waypoint_updater.py", line 49, in __init__
+    self.loop()
+  File "/home/workspace/CarND-Capstone/ros/src/waypoint_updater/waypoint_updater.py", line 58, in loop
+    self.publish_waypoints(closest_waypoint_idx)
+  File "/home/workspace/CarND-Capstone/ros/src/waypoint_updater/waypoint_updater.py", line 65, in publish_waypoints
+    self.final_waypoints_pub.publish(waypoint_list)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rospy/topics.py", line 879, in publish
+    data = args_kwds_to_message(self.data_class, args, kwds)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rospy/msg.py", line 122, in args_kwds_to_message
+    return data_class(*args)
+  File "/home/workspace/CarND-Capstone/ros/devel/lib/python2.7/dist-packages/styx_msgs/msg/_Lane.py", line 112, in __init__
+    super(Lane, self).__init__(*args, **kwds)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/genpy/message.py", line 294, in __init__
+    raise TypeError("Invalid number of arguments, args should be %s"%str(self.__slots__)+" args are"+str(args))
+TypeError: Invalid number of arguments, args should be ['header', 'waypoints'] args are([pose: 
+  header: 
+
+Before:  waypoint_list = self.base_waypoints.waypoints[closest_wp_idx:closest_wp_idx + LOOKAHEAD_WPS]
+Corrected: waypoint_list.waypoints = self.base_waypoints.waypoints[closest_wp_idx:closest_wp_idx + LOOKAHEAD_WPS]
+
