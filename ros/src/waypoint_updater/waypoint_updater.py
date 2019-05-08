@@ -36,6 +36,8 @@ class WaypointUpdater(object):
         self.waypoints_2d = None         # N by [x, y] array of base_waypoint [x, y] coords 
         self.waypoint_tree = None        # KDTree of waypoints_2d
         self.num_base_waypoints = None   # len(waypoints_2d)
+	self.prev_idx = -1               # track how often it changes
+	self.prev_pose = None            # track how often pose updates
 
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -52,19 +54,35 @@ class WaypointUpdater(object):
     def loop(self):
         rate = rospy.Rate(50)
         while not rospy.is_shutdown():
-            if self.pose and self.base_waypoints:
+            if self.pose and self.num_base_waypoints:
                 # Get closest waypoints
                 closest_waypoint_idx = self.find_closest_waypoint_idx()
+		#self.check_new_idx(closest_waypoint_idx)
                 self.publish_waypoints(closest_waypoint_idx)
             rate.sleep()
+
+    def check_new_idx(self,new_idx):
+	if not (new_idx == self.prev_idx):
+	    rospy.logdebug("New Waypoint")
+	self.prev_idx = new_idx
+
+    def check_new_pose(self):
+	if not self.prev_pose:
+	    self.prev_pose = self.pose
+	dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
+	thresh = 0.01
+	if (dl(self.prev_pose.pose.position, self.pose.pose.position) > thresh):
+	    rospy.logdebug("New Pose")
+        self.prev_pose = self.pose
+	
 
     def publish_waypoints(self,closest_wp_idx):
         waypoint_list = Lane()
         waypoint_list.header = self.base_waypoints.header
-        waypoint_list = self.base_waypoints.waypoints[closest_wp_idx:closest_wp_idx + LOOKAHEAD_WPS]
+        waypoint_list.waypoints = self.base_waypoints.waypoints[closest_wp_idx:closest_wp_idx + LOOKAHEAD_WPS]
         self.final_waypoints_pub.publish(waypoint_list)
-        rospy.logdebug("Publishing Waypoints")
-        rospy.logdebug("Closest IDX: %s", closest_wp_idx)
+        #rospy.logdebug("Publishing Waypoints")
+        #rospy.logdebug("Closest IDX: %s", closest_wp_idx)
 
     def find_closest_waypoint_idx(self):
 
@@ -94,6 +112,8 @@ class WaypointUpdater(object):
     def pose_cb(self, msg):
         # TODO: Implement
         self.pose = msg
+        #rospy.logdebug("Pulling Pose")
+        #self.check_new_pose()
 
     def waypoints_cb(self, waypoints):
         # TODO: Implement
