@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 import rospy
-import numpy as np
 from geometry_msgs.msg import PoseStamped
 from styx_msgs.msg import Lane, Waypoint
 from scipy.spatial import KDTree
 
+import numpy as np
 import math
 
 '''
@@ -28,7 +28,7 @@ LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this n
 
 class WaypointUpdater(object):
     def __init__(self):
-        rospy.init_node('waypoint_updater')
+        rospy.init_node('waypoint_updater', log_level=rospy.DEBUG)
 
         # TODO: Add other member variables you need below
         self.pose = None                 # of type PoseStamped
