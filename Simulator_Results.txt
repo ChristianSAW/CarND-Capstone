@@ -1,0 +1,19 @@
+Running Simulator in Windows
+Running ROS in VM 
+Comp Specs: Intel i7-4790K @ 4.3 GHz 8 cores, 16 GB RAM, Graphics GTX 970 - 4GB 
+VM allocations: 6 GB ram, 4 cores
+
+Ran simulator on fastest @ lowest resolution
+
+Topics:
+rates are publishing rates for a topic
+/image_color, rate: ~5.5 Hz, bandwidth: 10 Mb/s, Average msg size (1.44 MB)
+/final_waypoints, rate: 50 Hz, bandwidth: 674 Mb/s, Average msg size (12.63 Kb)
+/traffic_waypoint, rate: ~5.7 Hz
+/current_pose, rate: ~30-35 Hz
+/twist_cmd, rate: 50 Hz
+/current_vel, rate: ~17.5 (beginning) - 37 (stable) Hz
+/vehicle/dbw_enabled: NA
+/vehicle/break_cmd, rate: 50 Hz
+/vehicle/steering_cmd, rate: 50 Hz
+/vehicle/throttle_cmd, rate: 50 Hz
