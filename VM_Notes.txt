@@ -1,0 +1,109 @@
+Traceback (most recent call last):
+  File "/home/student/Udacity/CarND-Capstone-Individual/ros/src/waypoint_updater/waypoint_updater.py", line 134, in <module>
+    WaypointUpdater()
+  File "/home/student/Udacity/CarND-Capstone-Individual/ros/src/waypoint_updater/waypoint_updater.py", line 49, in __init__
+    self.loop()
+  File "/home/student/Udacity/CarND-Capstone-Individual/ros/src/waypoint_updater/waypoint_updater.py", line 57, in loop
+    closest_waypoint_idx = self.find_closest_waypoint_idx()
+  File "/home/student/Udacity/CarND-Capstone-Individual/ros/src/waypoint_updater/waypoint_updater.py", line 76, in find_closest_waypoint_idx
+    closest_idx = self.waypoint_tree.query([x,y], 1)[1]
+AttributeError: 'NoneType' object has no attribute 'query'
+[DEBUG] [1557354163.342883]: Number of base waypoints: 10902
+[DEBUG] [1557354163.343210]: Leaving waypoints_cb()
+[waypoint_updater-7] process has died [pid 5195, exit code 1, cmd /home/student/Udacity/CarND-Capstone-Individual/ros/src/waypoint_updater/waypoint_updater.py __name:=waypoint_updater __log:=/home/student/.ros/log/ca4f6490-71df-11e9-838e-0800272db293/waypoint_updater-7.log].
+log file: /home/student/.ros/log/ca4f6490-71df-11e9-838e-0800272db293/waypoint_updater-7*.log
+
+
+
+Get this error:
+[WARN] [1557355778.069927]: Could not process inbound connection: topic types do not match: [geometry_msgs/PoseStamped] vs. [std_msgs/Int32]{'message_definition': "# A Pose with reference coordinate frame and timestamp\nHeader header\nPose pose\n\n================================================================================\nMSG: std_msgs/Header\n# Standard metadata for higher-level stamped data types.\n# This is generally used to communicate timestamped data \n# in a particular coordinate frame.\n# \n# sequence ID: consecutively increasing ID \nuint32 seq\n#Two-integer timestamp that is expressed as:\n# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')\n# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')\n# time-handling sugar is provided by the client library\ntime stamp\n#Frame this data is associated with\n# 0: no frame\n# 1: global frame\nstring frame_id\n\n================================================================================\nMSG: geometry_msgs/Pose\n# A representation of pose in free space, composed of position and orientation. \nPoint position\nQuaternion orientation\n\n================================================================================\nMSG: geometry_msgs/Point\n# This contains the position of a point in free space\nfloat64 x\nfloat64 y\nfloat64 z\n\n================================================================================\nMSG: geometry_msgs/Quaternion\n# This represents an orientation in free space in quaternion form.\n\nfloat64 x\nfloat64 y\nfloat64 z\nfloat64 w\n", 'callerid': '/waypoint_updater', 'tcp_nodelay': '0', 'md5sum': 'd3812c3cbc69362b77dc0b19b345f8f5', 'topic': '/traffic_waypoint', 'type': 'geometry_msgs/PoseStamped'}
+
+
+rosnode info /styx_server:
+Node [/styx_server]
+Publications: 
+ * /vehicle/obstacle_points [sensor_msgs/PointCloud2]
+ * /vehicle/dbw_enabled [std_msgs/Bool]
+ * /rosout [rosgraph_msgs/Log]
+ * /vehicle/steering_report [dbw_mkz_msgs/SteeringReport]
+ * /current_pose [geometry_msgs/PoseStamped]
+ * /current_velocity [geometry_msgs/TwistStamped]
+ * /vehicle/obstacle [geometry_msgs/PoseStamped]
+ * /vehicle/lidar [sensor_msgs/PointCloud2]
+ * /vehicle/traffic_lights [styx_msgs/TrafficLightArray]
+ * /vehicle/brake_report [std_msgs/Float32]
+ * /tf [tf/tfMessage]
+ * /image_color [sensor_msgs/Image]
+ * /vehicle/throttle_report [std_msgs/Float32]
+
+Subscriptions: 
+ * /final_waypoints [styx_msgs/Lane]
+ * /vehicle/steering_cmd [dbw_mkz_msgs/SteeringCmd]
+ * /vehicle/brake_cmd [dbw_mkz_msgs/BrakeCmd]
+ * /vehicle/throttle_cmd [dbw_mkz_msgs/ThrottleCmd]
+
+Services: 
+ * /styx_server/set_logger_level
+ * /styx_server/get_loggers
+
+
+contacting node http://10.0.2.15:46515/ ...
+Pid: 18882
+Connections:
+ * topic: /vehicle/dbw_enabled
+    * to: /dbw_node
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /rosout
+    * to: /rosout
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /current_velocity
+    * to: /dbw_node
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /current_velocity
+    * to: /pure_pursuit
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /tf
+    * to: /tl_detector
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /vehicle/traffic_lights
+    * to: /tl_detector
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /current_pose
+    * to: /tl_detector
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /current_pose
+    * to: /waypoint_updater
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /current_pose
+    * to: /pure_pursuit
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /image_color
+    * to: /tl_detector
+    * direction: outbound
+    * transport: TCPROS
+ * topic: /vehicle/throttle_cmd
+    * to: /dbw_node (http://10.0.2.15:42927/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /final_waypoints
+    * to: /waypoint_updater (http://10.0.2.15:33167/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /vehicle/steering_cmd
+    * to: /dbw_node (http://10.0.2.15:42927/)
+    * direction: inbound
+    * transport: TCPROS
+ * topic: /vehicle/brake_cmd
+    * to: /dbw_node (http://10.0.2.15:42927/)
+    * direction: inbound
+    * transport: TCPROS
+
