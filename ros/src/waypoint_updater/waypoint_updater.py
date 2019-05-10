@@ -23,7 +23,7 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 100 # Number of waypoints we will publish. You can change this number [Original: 200]
+LOOKAHEAD_WPS = 30 # Number of waypoints we will publish. You can change this number [Original: 200]
 
 
 class WaypointUpdater(object):
@@ -52,12 +52,12 @@ class WaypointUpdater(object):
         
         #rospy.spin()
     def loop(self):
-        rate = rospy.Rate(50)
+        rate = rospy.Rate(30)
         while not rospy.is_shutdown():
             if self.pose and self.num_base_waypoints:
                 # Get closest waypoints
                 closest_waypoint_idx = self.find_closest_waypoint_idx()
-		#self.check_new_idx(closest_waypoint_idx)
+		self.check_new_idx(closest_waypoint_idx)
                 self.publish_waypoints(closest_waypoint_idx)
             rate.sleep()
 
@@ -82,8 +82,8 @@ class WaypointUpdater(object):
         waypoint_list.header = self.base_waypoints.header
         waypoint_list.waypoints = self.base_waypoints.waypoints[closest_wp_idx:closest_wp_idx + LOOKAHEAD_WPS]
         self.final_waypoints_pub.publish(waypoint_list)
-        #rospy.logdebug("Publishing Waypoints")
-        #rospy.logdebug("Closest IDX: %s", closest_wp_idx)
+        rospy.logdebug("Publishing Waypoints")
+        rospy.logdebug("Closest IDX: %s", closest_wp_idx)
 
     def find_closest_waypoint_idx(self):
 
