@@ -71,8 +71,9 @@ class WaypointUpdater(object):
 	    self.prev_pose = self.pose
 	dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
 	thresh = 0.01
-	if (dl(self.prev_pose.pose.position, self.pose.pose.position) > thresh):
-	    rospy.logdebug("New Pose")
+	dist = dl(self.prev_pose.pose.position, self.pose.pose.position)
+	if (dist > thresh):
+	    rospy.logdebug("New Pose; distance change: %s", dist)
         self.prev_pose = self.pose
 	
 
