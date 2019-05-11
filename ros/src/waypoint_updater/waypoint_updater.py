@@ -62,19 +62,19 @@ class WaypointUpdater(object):
             rate.sleep()
 
     def check_new_idx(self,new_idx):
-	    if not (new_idx == self.prev_idx):
-	        rospy.logdebug("New Waypoint")
-	    self.prev_idx = new_idx
+	if not (new_idx == self.prev_idx):
+	    rospy.logdebug("New Waypoint")
+	self.prev_idx = new_idx
 
     def check_new_pose(self):
-	    if not self.prev_pose:
-	        self.prev_pose = self.pose
-	    dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
-	    thresh = 0.01
-	    dist = dl(self.prev_pose.pose.position, self.pose.pose.position)
-	    if (dist > thresh):
-	        rospy.logdebug("New Pose; distance change: %s", dist)
-        #self.prev_pose = self.pose
+	if not self.prev_pose:
+	    self.prev_pose = self.pose
+	dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
+	thresh = 0.01
+	dist = dl(self.prev_pose.pose.position, self.pose.pose.position)
+	if (dist > thresh):
+	    rospy.logdebug("New Pose; distance change: %s", dist)
+        self.prev_pose = self.pose
 	
     def publish_waypoints(self,closest_wp_idx):
         waypoint_list = Lane()
