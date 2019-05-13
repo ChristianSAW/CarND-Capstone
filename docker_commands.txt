@@ -1,0 +1,41 @@
+
+// For Running in Windows Powershell: 
+
+docker build . -t capstone
+docker run -p 4567:4567 -v ${PWD}:/capstone -v /tmp/log:/root/.ros/ --rm -it capstone
+
+// Issues with using docker in windows: 
+https://github.com/Microsoft/VSLinux/issues/320 
+
+// Issues with starting container when just opening up powershell:
+https://stackoverflow.com/questions/49693353/error-response-from-daemon-driver-failed-programming-external-connectivity-on-e?rq=1
+https://github.com/docker/for-win/issues/2722 
+
+// Symbolic Link Issue:
+[1] problem described here: 
+https://serverfault.com/questions/410589/re-creating-lost-symbolic-links 
+
+[2] solution, git clone with symbolic links on: git clone -c core.symlinks=true https//git.url/... newFileName
+https://knowledge.udacity.com/questions/33484 
+https://github.com/Microsoft/VSLinux/issues/320 
+
+// Issue now
+
+/usr/bin/env: ‘python\r’: No such file or directory
+[styx_server-2] process has died [pid 1958, exit code 127, cmd /capstone/ros/src/styx/server.py __name:=styx_server __log:=/root/.ros/log/79da47a8-75ba-11e9-b46a-0242ac110002/styx_server-2.log].
+log file: /root/.ros/log/79da47a8-75ba-11e9-b46a-0242ac110002/styx_server-2*.log
+Roslaunch got a 'No such file or directory' error while attempting to run:
+
+/capstone/ros/src/styx/unity_simulator_launcher.sh __name:=unity_simulator __log:=/root/.ros/log/79da47a8-75ba-11e9-b46a-0242ac110002/unity_simulator-3.log
+
+Please make sure that all the executables in this command exist and have
+executable permission. This is often caused by a bad launch-prefix.
+The traceback for the exception was written to the log file
+[unity_simulator-3] killing on exit
+[rosout-1] killing on exit
+[master] killing on exit
+root@88d51aaa18a9:/capstone/ros#
+
+
+// SWITCH BETWEEN DOCKER AND VIRTUAL BOX
+https://stackoverflow.com/questions/41128258/docker-virtual-box-vt-x-is-not-available-verr-vmx-no-vmx 
