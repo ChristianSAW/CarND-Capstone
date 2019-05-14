@@ -1,0 +1,48 @@
+[roslaunch][ERROR] 2019-05-13 20:38:23,861: OSError(2, No such file or directory)
+[roslaunch][ERROR] 2019-05-13 20:38:23,861: Roslaunch got a 'No such file or directory' error while attempting to run:
+
+/capstone/ros/src/styx/unity_simulator_launcher.sh __name:=unity_simulator __log:=/root/.ros/log/0c62f67a-75bf-11e9-b7bd-0242ac110002/unity_simulator-3.log
+
+Please make sure that all the executables in this command exist and have
+executable permission. This is often caused by a bad launch-prefix.
+[roslaunch][ERROR] 2019-05-13 20:38:23,861: The traceback for the exception was written to the log file
+[roslaunch][ERROR] 2019-05-13 20:38:23,862: Traceback (most recent call last):
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/roslaunch/__init__.py", line 306, in main
+    p.start()
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/roslaunch/parent.py", line 279, in start
+    self.runner.launch()
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/roslaunch/launch.py", line 658, in launch
+    succeeded, failed = self._launch_nodes()
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/roslaunch/launch.py", line 367, in _launch_nodes
+    proc, success = self.launch_node(node)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/roslaunch/launch.py", line 557, in launch_node
+    success = process.start()
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/roslaunch/nodeprocess.py", line 316, in start
+    executable permission. This is often caused by a bad launch-prefix."""%(e.strerror, ' '.join(self.args)))
+FatalProcessLaunch: Roslaunch got a 'No such file or directory' error while attempting to run:
+
+/capstone/ros/src/styx/unity_simulator_launcher.sh __name:=unity_simulator __log:=/root/.ros/log/0c62f67a-75bf-11e9-b7bd-0242ac110002/unity_simulator-3.log
+
+Please make sure that all the executables in this command exist and have
+executable permission. This is often caused by a bad launch-prefix.
+
+[roslaunch.pmon][INFO] 2019-05-13 20:38:23,863: ProcessMonitor.shutdown <ProcessMonitor(ProcessMonitor-1, started daemon 140686321469184)>
+[roslaunch.pmon][INFO] 2019-05-13 20:38:23,936: ProcessMonitor._post_run <ProcessMonitor(ProcessMonitor-1, started daemon 140686321469184)>
+[roslaunch.pmon][INFO] 2019-05-13 20:38:23,936: ProcessMonitor._post_run <ProcessMonitor(ProcessMonitor-1, started daemon 140686321469184)>: remaining procs are [<roslaunch.nodeprocess.LocalProcess object at 0x7ff416583390>, <roslaunch.nodeprocess.LocalProcess object at 0x7ff4165af050>, <roslaunch.nodeprocess.LocalProcess object at 0x7ff414b3ca50>]
+[roslaunch.pmon][INFO] 2019-05-13 20:38:23,937: ProcessMonitor exit: killing unity_simulator-3
+[roslaunch][INFO] 2019-05-13 20:38:23,937: [unity_simulator-3] killing on exit
+[roslaunch.pmon][INFO] 2019-05-13 20:38:23,940: ProcessMonitor exit: killing rosout-1
+[roslaunch][INFO] 2019-05-13 20:38:23,940: [rosout-1] killing on exit
+[roslaunch][INFO] 2019-05-13 20:38:23,940: process[rosout-1]: killing os process with pid[3056] pgid[3056]
+[roslaunch][INFO] 2019-05-13 20:38:23,940: [rosout-1] sending SIGINT to pgid [3056]
+[roslaunch][INFO] 2019-05-13 20:38:23,940: [rosout-1] sent SIGINT to pgid [3056]
+[roslaunch][INFO] 2019-05-13 20:38:24,141: process[rosout-1]: SIGINT killed with return value 0
+[roslaunch.pmon][INFO] 2019-05-13 20:38:24,141: ProcessMonitor exit: killing master
+[roslaunch][INFO] 2019-05-13 20:38:24,141: [master] killing on exit
+[roslaunch][INFO] 2019-05-13 20:38:24,141: process[master]: killing os process with pid[3043] pgid[3043]
+[roslaunch][INFO] 2019-05-13 20:38:24,141: [master] sending SIGINT to pgid [3043]
+[roslaunch][INFO] 2019-05-13 20:38:24,142: [master] sent SIGINT to pgid [3043]
+[roslaunch][INFO] 2019-05-13 20:38:24,342: process[master]: SIGINT killed with return value 0
+[roslaunch.pmon][INFO] 2019-05-13 20:38:24,342: ProcessMonitor exit: cleaning up data structures and signals
+[roslaunch.pmon][INFO] 2019-05-13 20:38:24,342: ProcessMonitor exit: pmon has shutdown
+[rospy.core][INFO] 2019-05-13 20:38:24,377: signal_shutdown [atexit]
