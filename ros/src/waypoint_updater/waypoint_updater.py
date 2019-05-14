@@ -36,8 +36,8 @@ class WaypointUpdater(object):
         self.waypoints_2d = None         # N by [x, y] array of base_waypoint [x, y] coords 
         self.waypoint_tree = None        # KDTree of waypoints_2d
         self.num_base_waypoints = None   # len(waypoints_2d)
-	    self.prev_idx = -1               # track how often it changes
-	    self.prev_pose = None            # track how often pose updates
+        self.prev_idx = -1               # track how often it changes
+        self.prev_pose = None            # track how often pose updates
 
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -57,7 +57,7 @@ class WaypointUpdater(object):
             if self.pose and self.num_base_waypoints:
                 # Get closest waypoints
                 closest_waypoint_idx = self.find_closest_waypoint_idx()
-		        self.check_new_idx(closest_waypoint_idx)
+                self.check_new_idx(closest_waypoint_idx)
                 self.publish_waypoints(closest_waypoint_idx)
             rate.sleep()
 
@@ -74,9 +74,8 @@ class WaypointUpdater(object):
 	    dist = dl(self.prev_pose.pose.position, self.pose.pose.position)
 	    if (dist > thresh):
 	        rospy.logdebug("New Pose; distance change: %s", dist)
-        self.prev_pose = self.pose
+        #self.prev_pose = self.pose
 	
-
     def publish_waypoints(self,closest_wp_idx):
         waypoint_list = Lane()
         waypoint_list.header = self.base_waypoints.header
