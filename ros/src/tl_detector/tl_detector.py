@@ -111,6 +111,8 @@ class TLDetector(object):
         Each predicted state has to occur `STATE_COUNT_THRESHOLD` number
         of times till we start using it. Otherwise the previous stable state is
         used.
+        I.e. Publish new light state if get 3 consecutive states of the same color from
+        new images, otherwise publish the last state. 
         '''
         if self.state != state:
             self.state_count = 0
