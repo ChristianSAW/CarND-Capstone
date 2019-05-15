@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
+from std_msgs.msg import Int32
 from geometry_msgs.msg import PoseStamped
 from styx_msgs.msg import Lane, Waypoint
 from scipy.spatial import KDTree
@@ -23,7 +24,7 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 30 # Number of waypoints we will publish. You can change this number [Original: 200]
+LOOKAHEAD_WPS = 120 # Number of waypoints we will publish. You can change this number [Original: 200, Owen: 30]
 MAX_DECEL = 1.5    # try 0.5
 
 
@@ -47,7 +48,7 @@ class WaypointUpdater(object):
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 
         # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below (Dont Use for Now)
-        rospy.Subscriber('/traffic_waypoint', PoseStamped, self.traffic_cb)
+        rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
         rospy.Subscriber('/obstacle_waypoint', PoseStamped, self.obstacle_cb)
 
         self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
@@ -66,7 +67,7 @@ class WaypointUpdater(object):
                     self.publish_waypoints(closest_waypoint_idx)
                     self.start = False
                     self.count += 1
-                elif self.start == False and self.count == 3:        # done so you update waypoints every 3 cycles
+                elif self.start == False and self.count == 2:        # done so you update waypoints every 3 cycles
                     self.publish_waypoints(closest_waypoint_idx)
                     self.count = 0
                 self.count += 1
@@ -178,6 +179,7 @@ class WaypointUpdater(object):
     def traffic_cb(self, msg):
         # TODO: Callback for /traffic_waypoint message. Implement
         self.stopline_wp_idx = msg.data
+        rospy.logdebug("Stop Light Waypoint: %s", self.stopline_wp_idx)
 
     def obstacle_cb(self, msg):
         # TODO: Callback for /obstacle_waypoint message. We will implement it later
