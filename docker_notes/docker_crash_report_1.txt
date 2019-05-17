@@ -1,0 +1,6 @@
+// Docker Issues:
+
+Docker Desktop service is not running
+   at Docker.WPF.BackendClient.CheckService(String action) in C:\workspaces\stable-18.09.x\src\github.com\docker\pinata\win\src\Docker.WPF\BackendClient.cs:line 305
+   at Docker.WPF.BackendClient.SendMessage(String action, Object[] parameters) in C:\workspaces\stable-18.09.x\src\github.com\docker\pinata\win\src\Docker.WPF\BackendClient.cs:line 167
+   at Docker.WPF.TaskQueue.<>c__DisplayClass19_0.<.ctor>b__1() in C:\workspaces\stable-18.09.x\src\github.com\docker\pinata\win\src\Docker.WPF\TaskQueue.cs:line 59

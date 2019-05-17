@@ -1,0 +1,26 @@
+Docker Issue: 
+
+[1] 
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/engineio/server.py", line 505, in _trigger_event
+    return self.handlers[event](*args)
+  File "/usr/local/lib/python2.7/dist-packages/socketio/server.py", line 509, in _handle_eio_message
+    self._handle_event(sid, pkt.namespace, pkt.id, pkt.data)
+  File "/usr/local/lib/python2.7/dist-packages/socketio/server.py", line 448, in _handle_event
+    self._handle_event_internal(self, sid, data, namespace, id)
+  File "/usr/local/lib/python2.7/dist-packages/socketio/server.py", line 451, in _handle_event_internal
+    r = server._trigger_event(data[0], namespace, sid, *data[1:])
+  File "/usr/local/lib/python2.7/dist-packages/socketio/server.py", line 480, in _trigger_event
+    return self.handlers[namespace][event](*args)
+  File "/capstone/ros/src/styx/server.py", line 60, in image
+    bridge.publish_camera(data)
+  File "/capstone/ros/src/styx/bridge.py", line 182, in publish_camera
+    image_message = self.bridge.cv2_to_imgmsg(image_array, encoding="rgb8")
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/cv_bridge/core.py", line 248, in cv2_to_imgmsg
+    img_msg.height = cvim.shape[0]
+
+Solution: 
+https://github.com/udacity/CarND-Capstone/issues/107
+> pip install pillow --upgrade 
+^ run this inside docker
+
