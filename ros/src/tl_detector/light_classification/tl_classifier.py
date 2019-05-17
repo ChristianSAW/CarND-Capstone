@@ -9,6 +9,7 @@ import datetime
 
 
 USING_CLASSIFIER = True
+SIMPLE = False
 
 class TLClassifier(object):
     def __init__(self, is_site):
@@ -23,6 +24,12 @@ class TLClassifier(object):
             rospy.logdebug('#### is_site %s? SSD_GRAPH_FILE_PATH read = %s',is_site, self.SSD_GRAPH_FILE_PATH)
 
 
+            #self.image_tensor = None
+            #self.detection_boxes = None
+            #self.detection_scores = None
+            #self.detection_classes = None
+            #self.num_detections = None
+
             self.detection_graph = self.load_graph(self.SSD_GRAPH_FILE_PATH)
             self.image_tensor = self.detection_graph.get_tensor_by_name('image_tensor:0')
 
@@ -35,6 +42,11 @@ class TLClassifier(object):
 
             # The classification of the object (integer id).
             self.detection_classes = self.detection_graph.get_tensor_by_name('detection_classes:0')
+
+            #self.num_detections = self.detection_graph.get_tensor_by_name('num_detections:0')
+
+            # Start session once
+            self.sess = tf.Session(graph=self.detection_graph)
         else:
             pass
 
@@ -60,6 +72,12 @@ class TLClassifier(object):
                 serialized_graph = fid.read()
                 od_graph_def.ParseFromString(serialized_graph)
                 tf.import_graph_def(od_graph_def, name='')
+            
+            #self.image_tensor = graph.get_tensor_by_name('image_tensor:0')
+            #self.detection_boxes = graph.get_tensor_by_name('detection_boxes:0')
+            #self.detection_scores = graph.get_tensor_by_name('detection_scores:0')
+            #self.detection_classes = graph.get_tensor_by_name('detection_classes:0')
+            #self.num_detections = graph.get_tensor_by_name('num_detections:0')
 
         # graph_file_1='models/ssd_sim/frozen_inference_graph.pb'
         # with open(graph_file_1, 'rb') as f:
@@ -80,25 +98,47 @@ class TLClassifier(object):
         """
 
         image_np = np.expand_dims(np.asarray(image, dtype=np.uint8), 0)
-        # image_np = np.expand_dims(image, axis=0)
+        #image_np = np.expand_dims(image, axis=0)
 
-        with tf.Session(graph=self.detection_graph) as sess:
-            # Actual detection.
-            start = datetime.datetime.now()
-            rospy.loginfo('Starting Classification')
-            (boxes, scores, classes) = sess.run([self.detection_boxes, self.detection_scores, self.detection_classes],
-                                                feed_dict={self.image_tensor: image_np})
+        # Actual detection.
+        start = datetime.datetime.now()
+        rospy.loginfo('Starting Classification')
+        (boxes, scores, classes) = self.sess.run(
+            [self.detection_boxes, self.detection_scores, self.detection_classes],
+            feed_dict={self.image_tensor: image_np})
 
-            end = datetime.datetime.now()
-            timeDiff = end-start
-            rospy.loginfo('Total Classification Time: %s', timeDiff)
+        end = datetime.datetime.now()
+        timeDiff = end-start
+        rospy.loginfo('Total Classification Time: %s', timeDiff)
 
-            # Remove unnecessary dimensions
-            boxes = np.squeeze(boxes)
-            scores = np.squeeze(scores)
-            classes = np.squeeze(classes)
+        # Remove unnecessary dimensions
+        boxes = np.squeeze(boxes)
+        scores = np.squeeze(scores)
+        classes = np.squeeze(classes)
 
-            confidence_cutoff = 0.8 #before 0.8
+        if SIMPLE == True:
+            print('Scores: ', scores[0:10])
+            print('Classes: ', classes[0:10])
+
+            threshold = 0.5
+
+            if scores[1] > threshold:
+                if classes[1] == 1:
+                    print('GREEN')
+                    return TrafficLight.GREEN
+                elif classes[1] == 2:
+                    print('RED')
+                    return TrafficLight.RED
+                elif classes[1] == 3:
+                    print('YELLOW')
+                    return TrafficLight.YELLOW
+            return TrafficLight.RED
+        else: 
+
+            #print('Scores: ', scores[0])
+            #print('Classes: ', classes[0])
+
+            confidence_cutoff = 0.5 #before 0.8
             # Filter boxes with a confidence score less than `confidence_cutoff`
             boxes, scores, classes = self.filter_boxes(confidence_cutoff, boxes, scores, classes)
             #
@@ -112,9 +152,13 @@ class TLClassifier(object):
             #
             # plt.figure(figsize=(12, 8))
             # plt.imshow(image)
+            # Changing Default output to RED as greenlight detection is very accurate. 
+            # Yellow lights are detected as green; thus, if the light is not green or yellow, it must be red. 
+
+
 
             if len(classes) == 0:
-                return TrafficLight.UNKNOWN
+                return TrafficLight.RED
 
             switcher = {
                 1: TrafficLight.GREEN,
@@ -122,6 +166,6 @@ class TLClassifier(object):
                 3: TrafficLight.YELLOW,
                 }
 
-            class_result = switcher.get(classes[0], TrafficLight.UNKNOWN)
+            class_result = switcher.get(classes[0], TrafficLight.RED)
             rospy.logdebug('####classification class = %d', class_result)
             return class_result

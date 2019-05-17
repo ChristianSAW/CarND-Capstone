@@ -23,4 +23,8 @@
 
     <!--Camera Info Publisher -->
     <include file="$(find camera_info_publisher)/launch/camera_info_publisher.launch"/>
+
+    <!--Camera Classification Models -->
+    <param name="site_model_path" value="$(find tl_detector)/models/ssd_udacity/frozen_inference_graph.pb" />
+    <param name="sim_model_path" value="$(find tl_detector)/models/ssd_sim/frozen_inference_graph.pb" />
 </launch>
