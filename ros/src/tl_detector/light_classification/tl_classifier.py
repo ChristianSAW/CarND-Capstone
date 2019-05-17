@@ -5,9 +5,10 @@ from PIL import Image
 import rospy
 import os
 import cv2
+import datetime
 
 
-USING_CLASSIFIER = False
+USING_CLASSIFIER = True
 
 class TLClassifier(object):
     def __init__(self, is_site):
@@ -83,15 +84,21 @@ class TLClassifier(object):
 
         with tf.Session(graph=self.detection_graph) as sess:
             # Actual detection.
+            start = datetime.datetime.now()
+            rospy.loginfo('Starting Classification')
             (boxes, scores, classes) = sess.run([self.detection_boxes, self.detection_scores, self.detection_classes],
                                                 feed_dict={self.image_tensor: image_np})
+
+            end = datetime.datetime.now()
+            timeDiff = end-start
+            rospy.loginfo('Total Classification Time: %s', timeDiff)
 
             # Remove unnecessary dimensions
             boxes = np.squeeze(boxes)
             scores = np.squeeze(scores)
             classes = np.squeeze(classes)
 
-            confidence_cutoff = 0.8
+            confidence_cutoff = 0.8 #before 0.8
             # Filter boxes with a confidence score less than `confidence_cutoff`
             boxes, scores, classes = self.filter_boxes(confidence_cutoff, boxes, scores, classes)
             #

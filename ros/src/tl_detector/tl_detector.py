@@ -15,7 +15,7 @@ import yaml
 
 STATE_COUNT_THRESHOLD = 3
 GAP = 3
-USE_CLASSIFIER = False 
+USE_CLASSIFIER = True 
 
 class TLDetector(object):
     def __init__(self):
@@ -51,17 +51,20 @@ class TLDetector(object):
         rely on the position of the light and the camera image to predict it.
         '''
         sub3 = rospy.Subscriber('/vehicle/traffic_lights', TrafficLightArray, self.traffic_cb)
-        sub6 = rospy.Subscriber('/image_color', Image, self.image_cb)
 
         config_string = rospy.get_param("/traffic_light_config")
         self.config = yaml.load(config_string)
-        self.is_site = self.config['is_site']
+        #self.is_site = self.config['is_site']
+        self.is_site = False
 
         self.upcoming_red_light_pub = rospy.Publisher('/traffic_waypoint', Int32, queue_size=1)
 
         self.bridge = CvBridge()
         self.light_classifier = TLClassifier(self.is_site)
         self.listener = tf.TransformListener()
+
+        #start sub after classifier has started, so images can be classified
+        sub6 = rospy.Subscriber('/image_color', Image, self.image_cb)
 
         rospy.spin()
 
@@ -187,7 +190,10 @@ class TLDetector(object):
             cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
 
             #Get classification
-            return self.light_classifier.get_classification(cv_image)
+            ls = self.light_classifier.get_classification(cv_image)
+            rospy.loginfo('Classified State: ' + str(ls) + '; Actual State: ' + str(light.state))
+            return ls
+            #return self.light_classifier.get_classification(cv_image)
         else:
             return light.state
 
