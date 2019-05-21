@@ -57,7 +57,7 @@ class WaypointUpdater(object):
         
         #rospy.spin()
     def loop(self):
-        rate = rospy.Rate(30)
+        rate = rospy.Rate(50)
         while not rospy.is_shutdown():
             if self.pose and self.num_base_waypoints:
                 # Get closest waypoints
@@ -67,7 +67,7 @@ class WaypointUpdater(object):
                     self.publish_waypoints(closest_waypoint_idx)
                     self.start = False
                     self.count += 1
-                elif self.start == False and self.count == 2:        # done so you update waypoints every 3 cycles
+                elif self.start == False and self.count == 2:        # done so you update waypoints every 2 cycles
                     self.publish_waypoints(closest_waypoint_idx)
                     self.count = 0
                 self.count += 1
